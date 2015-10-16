@@ -65,7 +65,7 @@ class PostsController < ApplicationController
   private
     def authenticate
       authenticate_or_request_with_http_basic do |name, password|
-        name == "admin" && password == "secret"
+        name == Rails.application.secrets.admin_name && password == Rails.application.secrets.admin_secret
       end
     end
 
