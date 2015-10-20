@@ -31,6 +31,7 @@
   }
 .form-centered {
   @include six-columns-centered;
+
   }
 .submit {
   @extend .button;
@@ -41,8 +42,13 @@
 main {
   @include twelve-columns;
   background-color: #eee;
+  width:100%;
+  min-height:600px;
+  height: auto;
   }
 section {
   @extend .row;
   margin-top: 20px;
+  position: absolute;
+  top: 45%;
   }
