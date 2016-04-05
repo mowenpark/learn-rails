@@ -45,7 +45,7 @@ window.analytics.SNIPPET_VERSION = '2.0.8';
 
 // Load analytics.js with your API key, which will automatically load all of the
 // analytics integrations you've turned on for your account. Boosh!
-window.analytics.load(" lSKrj43cMD0DeCmdKJxV2VLORWFiLRPz ");
+window.analytics.load("lSKrj43cMD0DeCmdKJxV2VLORWFiLRPz");
 
 // Make our first page call to load the integrations. If you'd like to manually
 // name or tag the page, edit or move this call to use your own tags.
@@ -55,7 +55,6 @@ window.analytics.page();
 // accommodate Turbolinks
 // track page views and form submissions
 $(document).on('ready page:change', function() {
-  console.log('page loaded');
   analytics.page();
   analytics.trackForm($('#new_visitor'), 'Signed Up');
   analytics.trackForm($('#new_contact'), 'Contact Request');
