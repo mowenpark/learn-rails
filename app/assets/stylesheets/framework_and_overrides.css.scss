@@ -40,10 +40,9 @@
 // to make views framework-neutral
 main {
   @include twelve-columns;
-  background-image: url("http://res.cloudinary.com/dtdgkk9aa/image/upload/c_scale,w_2000/v1459560068/pexels-photo_d2ntdk.jpg");
-  background-position: center;
+  background-color: #eee;
   width:100%;
-  min-height:550px;
+  min-height:100%;
   height: auto;
   }
 section {
