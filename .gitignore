@@ -15,6 +15,14 @@
 /log/*
 !/log/.keep
 /tmp
+npm-debug.log*
 
 # Ignore secrets file.
 #/config/secrets.yml
+
+# Dependency directories
+node_modules
+jspm_packages
+
+# Optional npm cache directory
+.npm
