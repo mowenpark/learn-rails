@@ -47,15 +47,13 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
 	
+	var Visone = __webpack_require__(166);
+	
 	var MyComponent = React.createClass({
 	  displayName: 'MyComponent',
 	
 	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      'Hello World'
-	    );
+	    return React.createElement(Visone, null);
 	  }
 	});
 	
@@ -19984,6 +19982,29 @@
 	var ReactMount = __webpack_require__(156);
 	
 	module.exports = ReactMount.renderSubtreeIntoContainer;
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var Visone = React.createClass({
+	  displayName: 'Visone',
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'Hello World'
+	    );
+	  }
+	
+	});
+	
+	module.exports = Visone;
 
 /***/ }
 /******/ ]);

@@ -1,10 +1,12 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var Visone = require('./components/visone');
+
 var MyComponent = React.createClass({
   render: function () {
     return(
-      <div>Hello World</div>
+      <Visone />
     );
   }
 });
