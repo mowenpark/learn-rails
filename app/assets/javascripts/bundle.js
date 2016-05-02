@@ -47,13 +47,14 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
 	
-	var Visone = __webpack_require__(166);
+	var Visone = __webpack_require__(166),
+	    Navbar = __webpack_require__(167);
 	
 	var MyComponent = React.createClass({
 	  displayName: 'MyComponent',
 	
 	  render: function () {
-	    return React.createElement(Visone, null);
+	    return React.createElement(Navbar, null);
 	  }
 	});
 	
@@ -19990,21 +19991,113 @@
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
+	var data = [4, 8, 15, 16, 23, 42];
+	
 	var Visone = React.createClass({
-	  displayName: 'Visone',
+	  displayName: "Visone",
 	
 	
 	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      'Hello World'
-	    );
+	
+	    d3.select(".chart").selectAll("div").data(data).enter().append("div").style("width", function (d) {
+	      return d * 10 + "px";
+	    }).text(function (d) {
+	      return d;
+	    });
+	
+	    return React.createElement("div", { "class": "chart" });
 	  }
 	
 	});
 	
 	module.exports = Visone;
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var Navbar = React.createClass({
+	  displayName: "Navbar",
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "fixed" },
+	      React.createElement(
+	        "nav",
+	        { className: "top-bar", "data-topbar": true },
+	        React.createElement(
+	          "ul",
+	          { className: "title-area" },
+	          React.createElement(
+	            "li",
+	            { className: "name" },
+	            React.createElement(
+	              "h1",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "" },
+	                "Home"
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            { className: "toggle-topbar menu-icon" },
+	            React.createElement(
+	              "a",
+	              { href: "#" },
+	              React.createElement("span", null)
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "top-bar-section" },
+	          React.createElement(
+	            "ul",
+	            { className: "right" },
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "" },
+	                "About"
+	              )
+	            ),
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "" },
+	                "Blog"
+	              )
+	            ),
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "" },
+	                "Contact"
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Navbar;
 
 /***/ }
 /******/ ]);

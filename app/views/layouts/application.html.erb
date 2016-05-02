@@ -11,17 +11,10 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <header>
-      <%= render 'layouts/navigation' %>
-    </header>
     <main role="main">
        <%= render 'layouts/messages' %>
        <%= yield %>
     </main>
-    <div class="chart"></div>
-    <script type="text/javascript">
-      window.chart();
-    </script>
     <div id="main"></div>
   </body>
 </html>
