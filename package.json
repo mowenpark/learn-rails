@@ -21,11 +21,16 @@
   },
   "homepage": "https://github.com/mowenpark/learn-rails#readme",
   "dependencies": {
-    "babel-core": "^6.7.4",
-    "babel-loader": "^6.2.4",
-    "babel-preset-react": "^6.5.0",
-    "react": "^15.0.0",
-    "react-dom": "^15.0.0",
-    "webpack": "^1.12.14"
+    "babel-core": "^6.1.4",
+    "babel-loader": "^6.1.0",
+    "babel-preset-react": "^6.1.4",
+    "flux": "^2.1.1",
+    "history": "1.13.x",
+    "react": "^0.14.2",
+    "react-addons-linked-state-mixin": "^0.14.2",
+    "react-dom": "^0.14.2",
+    "react-router": "1.0.2",
+    "react-addons-css-transition-group": "0.14.7",
+    "webpack": "^1.12.4"
   }
 }

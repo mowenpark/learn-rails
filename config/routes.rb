@@ -4,5 +4,5 @@ Rails.application.routes.draw do
   end
   resources :contacts, only: [:new, :create]
   resources :visitors, only: [:new, :create]
-  root to: 'visitors#new'
+  root to: 'static_pages#index'
 end
