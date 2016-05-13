@@ -1,5 +1,7 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var d3Chart = require('../charts/d3chart');
+var ChartStore = require('../stores/chartstore');
 
 var Visone = React.createClass({
 
@@ -12,10 +14,7 @@ var Visone = React.createClass({
   },
 
   componentDidMount: function() {
-    this.token = ChartStore.addListener(this.renderChart);
-    ApiUtil.fetchChartData();
-
-    var el = this.getDOMNode();
+    var el = ReactDOM.findDOMNode(this);
     d3Chart.create(el, {
       width: '100%',
       height: '300px'
@@ -24,13 +23,13 @@ var Visone = React.createClass({
 
   renderChart: function () {
     this.setState({
-      data: ChartStore.all(),
+      data: this.state.data,
       domain: this.state.domain
     });
-  }
+  },
 
   componentDidUpdate: function() {
-    var el = this.getDOMNode();
+    var el = ReactDOM.findDOMNode(this);
     d3Chart.update(el, this.getChartState());
   },
 
@@ -42,7 +41,7 @@ var Visone = React.createClass({
   },
 
   componentWillUnmount: function() {
-    var el = this.getDOMNode();
+    var el = ReactDOM.findDOMNode(this);
     d3Chart.destroy(el);
   },
 
