@@ -51,7 +51,7 @@
 	var Route = __webpack_require__(159).Route;
 	var Link = __webpack_require__(159).Link;
 	
-	var Visone = __webpack_require__(208),
+	var Visone = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./components/visone\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())),
 	    Navbar = __webpack_require__(210),
 	    Home = __webpack_require__(211);
 	
@@ -24340,106 +24340,8 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 208 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	var d3Chart = __webpack_require__(209);
-	
-	var Visone = React.createClass({
-	  displayName: 'Visone',
-	
-	
-	  propTypes: {
-	    data: [{ id: '5fbmzmtc', x: 7, y: 41, z: 6 }, { id: 's4f8phwm', x: 11, y: 45, z: 9 }],
-	    domain: { x: [0, 30], y: [0, 100] }
-	  },
-	
-	  componentDidMount: function () {
-	    var el = this.getDOMNode();
-	    console.log(el);
-	    d3Chart.create(el, {
-	      width: '100%',
-	      height: '300px'
-	    }, this.getChartState());
-	  },
-	
-	  componentDidUpdate: function () {
-	    var el = this.getDOMNode();
-	    d3Chart.update(el, this.getChartState());
-	  },
-	
-	  getChartState: function () {
-	    return {
-	      data: [{ id: '5fbmzmtc', x: 7, y: 41, z: 6 }, { id: 's4f8phwm', x: 11, y: 45, z: 9 }],
-	      domain: { x: [0, 30], y: [0, 100] }
-	    };
-	  },
-	
-	  componentWillUnmount: function () {
-	    var el = this.getDOMNode();
-	    d3Chart.destroy(el);
-	  },
-	
-	  render: function () {
-	    return React.createElement('div', { className: 'Chart' });
-	  }
-	});
-	
-	module.exports = Visone;
-
-/***/ },
-/* 209 */
-/***/ function(module, exports) {
-
-	var d3Chart = {};
-	
-	d3Chart.create = function (el, props, state) {
-	  var svg = d3.select(el).append('svg').attr('class', 'd3').attr('width', props.width).attr('height', props.height);
-	
-	  svg.append('g').attr('class', 'd3-points');
-	
-	  this.update(el, state);
-	};
-	
-	d3Chart.update = function (el, state) {
-	  // Re-compute the scales, and render the data points
-	  var scales = d3.scale.linear().domain([0, 30]).range([0, 100]);
-	  this._drawPoints(el, scales, state.data);
-	};
-	
-	d3Chart.destroy = function (el) {
-	  // Any clean-up would go here
-	  // in this example there is nothing to do
-	};
-	
-	d3Chart._drawPoints = function (el, scales, data) {
-	  var g = d3.select(el).selectAll('.d3-points');
-	
-	  var point = g.selectAll('.d3-point').data(data, function (d) {
-	    return d.id;
-	  });
-	
-	  // ENTER
-	  point.enter().append('circle').attr('class', 'd3-point');
-	
-	  // ENTER & UPDATE
-	  point.attr('cx', function (d) {
-	    return scales(d.x);
-	  }).attr('cy', function (d) {
-	    return scales(d.y);
-	  }).attr('r', function (d) {
-	    return scales(d.z);
-	  });
-	
-	  // EXIT
-	  point.exit().remove();
-	};
-	
-	module.exports = d3Chart;
-
-/***/ },
+/* 208 */,
+/* 209 */,
 /* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
