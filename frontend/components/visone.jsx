@@ -19,7 +19,7 @@ var Visone = React.createClass({
     var el = ReactDOM.findDOMNode(this);
     d3Chart.create(el, {
       width: '100%',
-      height: '500px'
+      height: '1000px'
     }, this.getChartState());
     this.token = ChartStore.addListener(this.renderChart);
     ApiUtil.fetchChartData();

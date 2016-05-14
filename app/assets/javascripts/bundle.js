@@ -24366,7 +24366,7 @@
 	    var el = ReactDOM.findDOMNode(this);
 	    d3Chart.create(el, {
 	      width: '100%',
-	      height: '500px'
+	      height: '1000px'
 	    }, this.getChartState());
 	    this.token = ChartStore.addListener(this.renderChart);
 	    ApiUtil.fetchChartData();
@@ -24420,7 +24420,7 @@
 	
 	d3Chart.update = function (el, state) {
 	  // Re-compute the scales, and render the data points
-	  var scales = d3.scale.linear().domain([0, 30]).range([0, 300]);
+	  var scales = d3.scale.linear().domain([0, 30]).range([0, 200]);
 	  this._drawPoints(el, scales, state.data);
 	};
 	
@@ -24430,6 +24430,8 @@
 	};
 	
 	d3Chart._drawPoints = function (el, scales, data) {
+	  var color = d3.scale.category20c();
+	
 	  var g = d3.select(el).selectAll('.d3-points');
 	
 	  var point = g.selectAll('.d3-point').data(data, function (d) {
@@ -24446,6 +24448,8 @@
 	    return scales(Math.random() * 100 + 1);
 	  }).attr('r', function (d) {
 	    return scales(d.population / 1000000);
+	  }).style("fill", function (d) {
+	    return color(d.country);
 	  });
 	
 	  // EXIT
