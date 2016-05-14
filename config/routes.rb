@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  
+  root to: 'static_pages#index'
 
   namespace :api, defaults: {format: :json} do
     resources :populations
@@ -10,5 +12,5 @@ Rails.application.routes.draw do
 
   resources :contacts, only: [:new, :create]
   resources :visitors, only: [:new, :create]
-  root to: 'static_pages#index'
+
 end

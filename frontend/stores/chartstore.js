@@ -3,10 +3,10 @@ var Store = require('flux/utils').Store;
 
 var ChartStore = new Store(AppDispatcher);
 
-var _data = {};
+var _data = [];
 
-var resetUser = function(user){
-  _data = jQuery.extend(true, {}, user);
+var resetData = function(data){
+  _data = data;
 };
 
 ChartStore.all = function () {
@@ -15,8 +15,8 @@ ChartStore.all = function () {
 
 ChartStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
-    case "RECEIVE_USER":
-      resetUser(payload.user);
+    case "RECEIVE_DATA":
+      resetData(payload.data);
       ChartStore.__emitChange();
       break;
   }

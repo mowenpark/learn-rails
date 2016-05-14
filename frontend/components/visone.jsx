@@ -1,14 +1,16 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+
 var d3Chart = require('../charts/d3chart');
-var ChartStore = require('../stores/chartstore');
+
+var ChartStore = require('../stores/chartstore'),
+    ApiUtil = require('../util/api_util');
 
 var Visone = React.createClass({
 
   getInitialState: function () {
     return {
-      data: [{id: '5fbmzmtc', x: 7, y: 41, z: 6},
-            {id: 's4f8phwm', x: 11, y: 45, z: 9}],
+      data: ChartStore.all(),
       domain: {x: [0, 30], y: [0, 100]}
     };
   },
@@ -17,13 +19,15 @@ var Visone = React.createClass({
     var el = ReactDOM.findDOMNode(this);
     d3Chart.create(el, {
       width: '100%',
-      height: '300px'
+      height: '500px'
     }, this.getChartState());
+    this.token = ChartStore.addListener(this.renderChart);
+    ApiUtil.fetchChartData();
   },
 
   renderChart: function () {
     this.setState({
-      data: this.state.data,
+      data: ChartStore.all(),
       domain: this.state.domain
     });
   },
@@ -35,12 +39,13 @@ var Visone = React.createClass({
 
   getChartState: function() {
     return {
-      data: this.state.data,
+      data: ChartStore.all(),
       domain: this.state.domain
     };
   },
 
   componentWillUnmount: function() {
+    this.token.remove();
     var el = ReactDOM.findDOMNode(this);
     d3Chart.destroy(el);
   },

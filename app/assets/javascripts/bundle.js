@@ -24345,8 +24345,11 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
+	
 	var d3Chart = __webpack_require__(209);
-	var ChartStore = __webpack_require__(212);
+	
+	var ChartStore = __webpack_require__(212),
+	    ApiUtil = __webpack_require__(234);
 	
 	var Visone = React.createClass({
 	  displayName: 'Visone',
@@ -24354,7 +24357,7 @@
 	
 	  getInitialState: function () {
 	    return {
-	      data: [{ id: '5fbmzmtc', x: 7, y: 41, z: 6 }, { id: 's4f8phwm', x: 11, y: 45, z: 9 }],
+	      data: ChartStore.all(),
 	      domain: { x: [0, 30], y: [0, 100] }
 	    };
 	  },
@@ -24363,13 +24366,15 @@
 	    var el = ReactDOM.findDOMNode(this);
 	    d3Chart.create(el, {
 	      width: '100%',
-	      height: '300px'
+	      height: '500px'
 	    }, this.getChartState());
+	    this.token = ChartStore.addListener(this.renderChart);
+	    ApiUtil.fetchChartData();
 	  },
 	
 	  renderChart: function () {
 	    this.setState({
-	      data: this.state.data,
+	      data: ChartStore.all(),
 	      domain: this.state.domain
 	    });
 	  },
@@ -24381,12 +24386,13 @@
 	
 	  getChartState: function () {
 	    return {
-	      data: this.state.data,
+	      data: ChartStore.all(),
 	      domain: this.state.domain
 	    };
 	  },
 	
 	  componentWillUnmount: function () {
+	    this.token.remove();
 	    var el = ReactDOM.findDOMNode(this);
 	    d3Chart.destroy(el);
 	  },
@@ -24435,11 +24441,11 @@
 	
 	  // ENTER & UPDATE
 	  point.attr('cx', function (d) {
-	    return scales(d.x);
+	    return scales(Math.random() * 10 + 1);
 	  }).attr('cy', function (d) {
-	    return scales(d.y);
+	    return scales(Math.random() * 10 + 1);
 	  }).attr('r', function (d) {
-	    return scales(d.z);
+	    return scales(d.population / 1000000);
 	  });
 	
 	  // EXIT
@@ -24605,10 +24611,10 @@
 	
 	var ChartStore = new Store(AppDispatcher);
 	
-	var _data = {};
+	var _data = [];
 	
-	var resetUser = function (user) {
-	  _data = jQuery.extend(true, {}, user);
+	var resetData = function (data) {
+	  _data = data;
 	};
 	
 	ChartStore.all = function () {
@@ -24617,8 +24623,8 @@
 	
 	ChartStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
-	    case "RECEIVE_USER":
-	      resetUser(payload.user);
+	    case "RECEIVE_DATA":
+	      resetData(payload.data);
 	      ChartStore.__emitChange();
 	      break;
 	  }
@@ -31384,6 +31390,49 @@
 	
 	module.exports = FluxMixinLegacy;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiActions = __webpack_require__(235);
+	
+	var ApiUtil = {
+	
+		fetchChartData: function () {
+	
+			$.ajax({
+				url: '/api/populations',
+				type: 'get',
+				success: function (params) {
+					ApiActions.receiveChartData(params);
+				},
+				error: function (params) {}
+			});
+		}
+	
+	};
+	
+	module.exports = ApiUtil;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(213);
+	
+	var ApiActions = {
+	
+	  receiveChartData: function (data) {
+	    AppDispatcher.dispatch({
+	      actionType: "RECEIVE_DATA",
+	      data: data
+	    });
+	  }
+	};
+	
+	module.exports = ApiActions;
 
 /***/ }
 /******/ ]);

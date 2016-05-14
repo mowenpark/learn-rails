@@ -34,9 +34,9 @@ d3Chart._drawPoints = function(el, scales, data) {
       .attr('class', 'd3-point');
 
   // ENTER & UPDATE
-  point.attr('cx', function(d) { return scales(d.x); })
-      .attr('cy', function(d) { return scales(d.y); })
-      .attr('r', function(d) { return scales(d.z); });
+  point.attr('cx', function(d) { return scales(Math.random()*10+1); })
+      .attr('cy', function(d) { return scales(Math.random()*10+1); })
+      .attr('r', function(d) { return scales(d.population/1000000); });
 
   // EXIT
   point.exit()
