@@ -14,7 +14,7 @@ d3Chart.create = function(el, props, state) {
 
 d3Chart.update = function(el, state) {
   // Re-compute the scales, and render the data points
-  var scales = d3.scale.linear().domain([0, 30]).range([0, 100]);
+  var scales = d3.scale.linear().domain([0, 30]).range([0, 300]);
   this._drawPoints(el, scales, state.data);
 };
 
@@ -27,15 +27,15 @@ d3Chart._drawPoints = function(el, scales, data) {
   var g = d3.select(el).selectAll('.d3-points');
 
   var point = g.selectAll('.d3-point')
-    .data(data, function(d) { return d.id; });
+    .data(data, function(d) { return d.country; });
 
   // ENTER
   point.enter().append('circle')
       .attr('class', 'd3-point');
 
   // ENTER & UPDATE
-  point.attr('cx', function(d) { return scales(Math.random()*10+1); })
-      .attr('cy', function(d) { return scales(Math.random()*10+1); })
+  point.attr('cx', function(d) { return scales(Math.random()*100+1); })
+      .attr('cy', function(d) { return scales(Math.random()*100+1); })
       .attr('r', function(d) { return scales(d.population/1000000); });
 
   // EXIT
