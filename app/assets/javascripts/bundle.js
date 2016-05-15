@@ -52,8 +52,8 @@
 	var Link = __webpack_require__(159).Link;
 	
 	var Visone = __webpack_require__(208),
-	    Navbar = __webpack_require__(210),
-	    Home = __webpack_require__(211);
+	    Navbar = __webpack_require__(234),
+	    Home = __webpack_require__(235);
 	
 	var sampleData = [{ id: '5fbmzmtc', x: 7, y: 41, z: 6 }, { id: 's4f8phwm', x: 11, y: 45, z: 9 }];
 	
@@ -24348,8 +24348,8 @@
 	
 	var d3Chart = __webpack_require__(209);
 	
-	var ChartStore = __webpack_require__(212),
-	    ApiUtil = __webpack_require__(234);
+	var ChartStore = __webpack_require__(210),
+	    ApiUtil = __webpack_require__(232);
 	
 	var Visone = React.createClass({
 	  displayName: 'Visone',
@@ -24410,50 +24410,75 @@
 
 	var d3Chart = {};
 	
+	var margin = { top: 19.5, right: 19.5, bottom: 19.5, left: 39.5 },
+	    width = 1000 - margin.right,
+	    height = 1000 - margin.top - margin.bottom;
+	
+	var xScale = d3.scale.log().domain([300, 10000000]).range([10, width]),
+	    yScale = d3.scale.sqrt().domain([0, 1]).range([height, 0]);
+	
+	var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(12, d3.format(",d")),
+	    yAxis = d3.svg.axis().orient("right").scale(yScale).ticks(9, d3.format(",d"));
+	
 	d3Chart.create = function (el, props, state) {
-	  var svg = d3.select(el).append('svg').attr('class', 'd3').attr('width', props.width).attr('height', props.height);
 	
-	  svg.append('g').attr('class', 'd3-points');
+	    var svg = d3.select(el).append('svg').attr('class', 'd3').attr('width', props.width).attr('height', props.height);
+	    var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
 	
-	  this.update(el, state);
+	    svg.append('g').attr('class', 'd3-points');
+	
+	    // Add the x-axis.
+	    svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
+	    // Add the y-axis.
+	    svg.append("g").attr("class", "y axis").call(yAxis);
+	
+	    this.update(el, state);
 	};
 	
 	d3Chart.update = function (el, state) {
-	  // Re-compute the scales, and render the data points
-	  var scales = d3.scale.linear().domain([0, 30]).range([0, 200]);
-	  this._drawPoints(el, scales, state.data);
+	    // Re-compute the scales, and render the data points
+	    var scales = d3.scale.sqrt().domain([0, 10000000]).range([0, 100]);
+	    this._drawPoints(el, scales, state.data);
 	};
 	
 	d3Chart.destroy = function (el) {
-	  // Any clean-up would go here
-	  // in this example there is nothing to do
+	    // Any clean-up would go here
+	    // in this example there is nothing to do
 	};
 	
 	d3Chart._drawPoints = function (el, scales, data) {
-	  var color = d3.scale.category20c();
 	
-	  var g = d3.select(el).selectAll('.d3-points');
+	    var countrylabel = d3.select('svg').append("text").attr("class", "country label").attr("text-anchor", "start").attr("y", 80).attr("x", 20).text(" ");
 	
-	  var point = g.selectAll('.d3-point').data(data, function (d) {
-	    return d.country;
-	  });
+	    var color = d3.scale.category20c();
 	
-	  // ENTER
-	  point.enter().append('circle').attr('class', 'd3-point');
+	    var g = d3.select(el).selectAll('.d3-points');
 	
-	  // ENTER & UPDATE
-	  point.attr('cx', function (d) {
-	    return scales(Math.random() * 100 + 1);
-	  }).attr('cy', function (d) {
-	    return scales(Math.random() * 100 + 1);
-	  }).attr('r', function (d) {
-	    return scales(d.population / 1000000);
-	  }).style("fill", function (d) {
-	    return color(d.country);
-	  });
+	    var point = g.selectAll('.d3-point').data(data, function (d) {
+	        return d.country;
+	    });
 	
-	  // EXIT
-	  point.exit().remove();
+	    // ENTER
+	    point.enter().append('circle').attr('class', 'd3-point');
+	
+	    // ENTER & UPDATE
+	    point.attr('cx', function (d) {
+	        return xScale(d.population);
+	    }).attr('cy', function (d) {
+	        return yScale(Math.random());
+	    }).attr('r', function (d) {
+	        return scales(d.population);
+	    }).style("fill", function (d) {
+	        return color(d.country);
+	    }).on("mouseenter", function (d) {
+	        point.style("opacity", .4);
+	        d3.select(this).style("opacity", 1);
+	    }).on("mouseleave", function () {
+	        point.style("opacity", 1);
+	    });
+	
+	    // EXIT
+	    point.exit().remove();
 	};
 	
 	module.exports = d3Chart;
@@ -24462,156 +24487,8 @@
 /* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	var Navbar = React.createClass({
-	  displayName: "Navbar",
-	
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "fixed" },
-	      React.createElement(
-	        "nav",
-	        { className: "top-bar", "data-topbar": true },
-	        React.createElement(
-	          "ul",
-	          { className: "title-area" },
-	          React.createElement(
-	            "li",
-	            { className: "name" },
-	            React.createElement(
-	              "h1",
-	              null,
-	              React.createElement(
-	                "a",
-	                { href: "" },
-	                "Home"
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            "li",
-	            { className: "toggle-topbar menu-icon" },
-	            React.createElement(
-	              "a",
-	              { href: "#" },
-	              React.createElement("span", null)
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          "div",
-	          { className: "top-bar-section" },
-	          React.createElement(
-	            "ul",
-	            { className: "right" },
-	            React.createElement(
-	              "li",
-	              null,
-	              React.createElement(
-	                "a",
-	                { href: "" },
-	                "About"
-	              )
-	            ),
-	            React.createElement(
-	              "li",
-	              null,
-	              React.createElement(
-	                "a",
-	                { href: "" },
-	                "Blog"
-	              )
-	            ),
-	            React.createElement(
-	              "li",
-	              null,
-	              React.createElement(
-	                "a",
-	                { href: "" },
-	                "Contact"
-	              )
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = Navbar;
-
-/***/ },
-/* 211 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	var Home = React.createClass({
-	  displayName: "Home",
-	
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "home-img" },
-	      React.createElement(
-	        "section",
-	        null,
-	        React.createElement(
-	          "div",
-	          { className: "form-centered" },
-	          React.createElement(
-	            "h1",
-	            null,
-	            "Stay in touch!"
-	          ),
-	          React.createElement(
-	            "div",
-	            { className: "row" },
-	            React.createElement(
-	              "div",
-	              { className: "large-12 columns" },
-	              React.createElement(
-	                "div",
-	                { className: "row collapse" },
-	                React.createElement(
-	                  "div",
-	                  { className: "small-10 columns" },
-	                  React.createElement("input", { type: "text", placeholder: "Hex Value" })
-	                ),
-	                React.createElement(
-	                  "div",
-	                  { className: "small-2 columns" },
-	                  React.createElement(
-	                    "a",
-	                    { href: "#", className: "button postfix" },
-	                    "Go"
-	                  )
-	                )
-	              )
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = Home;
-
-/***/ },
-/* 212 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(213);
-	var Store = __webpack_require__(217).Store;
+	var AppDispatcher = __webpack_require__(211);
+	var Store = __webpack_require__(215).Store;
 	
 	var ChartStore = new Store(AppDispatcher);
 	
@@ -24637,15 +24514,15 @@
 	module.exports = ChartStore;
 
 /***/ },
-/* 213 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(214).Dispatcher;
+	var Dispatcher = __webpack_require__(212).Dispatcher;
 	
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 214 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24657,11 +24534,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(215);
+	module.exports.Dispatcher = __webpack_require__(213);
 
 
 /***/ },
-/* 215 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24683,7 +24560,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(214);
 	
 	var _prefix = 'ID_';
 	
@@ -24898,7 +24775,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 216 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24953,7 +24830,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 217 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24965,15 +24842,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(218);
-	module.exports.MapStore = __webpack_require__(221);
-	module.exports.Mixin = __webpack_require__(233);
-	module.exports.ReduceStore = __webpack_require__(222);
-	module.exports.Store = __webpack_require__(223);
+	module.exports.Container = __webpack_require__(216);
+	module.exports.MapStore = __webpack_require__(219);
+	module.exports.Mixin = __webpack_require__(231);
+	module.exports.ReduceStore = __webpack_require__(220);
+	module.exports.Store = __webpack_require__(221);
 
 
 /***/ },
-/* 218 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24995,10 +24872,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(219);
+	var FluxStoreGroup = __webpack_require__(217);
 	
-	var invariant = __webpack_require__(216);
-	var shallowEqual = __webpack_require__(220);
+	var invariant = __webpack_require__(214);
+	var shallowEqual = __webpack_require__(218);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -25156,7 +25033,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 219 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25175,7 +25052,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(214);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -25237,7 +25114,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 220 */
+/* 218 */
 /***/ function(module, exports) {
 
 	/**
@@ -25292,7 +25169,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 221 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25313,10 +25190,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(222);
-	var Immutable = __webpack_require__(232);
+	var FluxReduceStore = __webpack_require__(220);
+	var Immutable = __webpack_require__(230);
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(214);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -25442,7 +25319,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 222 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25463,10 +25340,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(223);
+	var FluxStore = __webpack_require__(221);
 	
-	var abstractMethod = __webpack_require__(231);
-	var invariant = __webpack_require__(216);
+	var abstractMethod = __webpack_require__(229);
+	var invariant = __webpack_require__(214);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -25549,7 +25426,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 223 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25568,11 +25445,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(224);
+	var _require = __webpack_require__(222);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(214);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -25732,7 +25609,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 224 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25745,14 +25622,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(225)
+	  EventEmitter: __webpack_require__(223)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 225 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25771,11 +25648,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(226);
-	var EventSubscriptionVendor = __webpack_require__(228);
+	var EmitterSubscription = __webpack_require__(224);
+	var EventSubscriptionVendor = __webpack_require__(226);
 	
-	var emptyFunction = __webpack_require__(230);
-	var invariant = __webpack_require__(229);
+	var emptyFunction = __webpack_require__(228);
+	var invariant = __webpack_require__(227);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -25949,7 +25826,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 226 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25970,7 +25847,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(227);
+	var EventSubscription = __webpack_require__(225);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -26002,7 +25879,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 227 */
+/* 225 */
 /***/ function(module, exports) {
 
 	/**
@@ -26056,7 +25933,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 228 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26075,7 +25952,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(229);
+	var invariant = __webpack_require__(227);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -26165,7 +26042,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 229 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26220,7 +26097,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 230 */
+/* 228 */
 /***/ function(module, exports) {
 
 	/**
@@ -26262,7 +26139,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 231 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26279,7 +26156,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(214);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -26289,7 +26166,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 232 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31273,7 +31150,7 @@
 	}));
 
 /***/ },
-/* 233 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31290,9 +31167,9 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(219);
+	var FluxStoreGroup = __webpack_require__(217);
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(214);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -31396,11 +31273,11 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 234 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ApiActions = __webpack_require__(235);
+	var ApiActions = __webpack_require__(233);
 	
 	var ApiUtil = {
 	
@@ -31421,10 +31298,10 @@
 	module.exports = ApiUtil;
 
 /***/ },
-/* 235 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(213);
+	var AppDispatcher = __webpack_require__(211);
 	
 	var ApiActions = {
 	
@@ -31437,6 +31314,154 @@
 	};
 	
 	module.exports = ApiActions;
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var Navbar = React.createClass({
+	  displayName: "Navbar",
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "fixed" },
+	      React.createElement(
+	        "nav",
+	        { className: "top-bar", "data-topbar": true },
+	        React.createElement(
+	          "ul",
+	          { className: "title-area" },
+	          React.createElement(
+	            "li",
+	            { className: "name" },
+	            React.createElement(
+	              "h1",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "" },
+	                "Home"
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            { className: "toggle-topbar menu-icon" },
+	            React.createElement(
+	              "a",
+	              { href: "#" },
+	              React.createElement("span", null)
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "top-bar-section" },
+	          React.createElement(
+	            "ul",
+	            { className: "right" },
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "" },
+	                "About"
+	              )
+	            ),
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "" },
+	                "Blog"
+	              )
+	            ),
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "" },
+	                "Contact"
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Navbar;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var Home = React.createClass({
+	  displayName: "Home",
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "home-img" },
+	      React.createElement(
+	        "section",
+	        null,
+	        React.createElement(
+	          "div",
+	          { className: "form-centered" },
+	          React.createElement(
+	            "h1",
+	            null,
+	            "Stay in touch!"
+	          ),
+	          React.createElement(
+	            "div",
+	            { className: "row" },
+	            React.createElement(
+	              "div",
+	              { className: "large-12 columns" },
+	              React.createElement(
+	                "div",
+	                { className: "row collapse" },
+	                React.createElement(
+	                  "div",
+	                  { className: "small-10 columns" },
+	                  React.createElement("input", { type: "text", placeholder: "Hex Value" })
+	                ),
+	                React.createElement(
+	                  "div",
+	                  { className: "small-2 columns" },
+	                  React.createElement(
+	                    "a",
+	                    { href: "#", className: "button postfix" },
+	                    "Go"
+	                  )
+	                )
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Home;
 
 /***/ }
 /******/ ]);
