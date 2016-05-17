@@ -24448,11 +24448,22 @@
 	
 	d3Chart._drawPoints = function (el, scales, data) {
 	
-	    var countrylabel = d3.select('svg').append("text").attr("class", "country label").attr("text-anchor", "start").attr("y", 80).attr("x", 20).text(" ");
+	    var div = d3.select("svg").append("div").attr("class", "tooltip").style("opacity", 0);
 	
 	    var color = d3.scale.category20c();
 	
 	    var g = d3.select(el).selectAll('.d3-points');
+	
+	    var text = g.selectAll(".d3-point").data(data).enter().append("text");
+	
+	    //Add SVG Text Element Attributes
+	    var textLabels = text.attr("x", function (d) {
+	        return xScale(d.population);
+	    }).attr("y", function (d) {
+	        return yScale(Math.random());
+	    }).text(function (d) {
+	        return d.country;
+	    }).attr("font-family", "sans-serif").attr("font-size", "20px").attr("fill", "red");
 	
 	    var point = g.selectAll('.d3-point').data(data, function (d) {
 	        return d.country;
@@ -24471,8 +24482,9 @@
 	    }).style("fill", function (d) {
 	        return color(d.country);
 	    }).on("mouseenter", function (d) {
-	        point.style("opacity", .4);
-	        d3.select(this).style("opacity", 1);
+	        var rect = event.target.getBoundingClientRect();
+	        point.transition().duration(200).style("opacity", .4);
+	        d3.select(this).transition().duration(200).style("opacity", 1);
 	    }).on("mouseleave", function () {
 	        point.style("opacity", 1);
 	    });
