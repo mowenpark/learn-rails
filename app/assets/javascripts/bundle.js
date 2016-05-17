@@ -24414,7 +24414,7 @@
 	    width = 1000 - margin.right,
 	    height = 1000 - margin.top - margin.bottom;
 	
-	var xScale = d3.scale.log().domain([300, 10000000]).range([10, width]),
+	var xScale = d3.scale.linear().domain([1, 10000000]).range([10, width]),
 	    yScale = d3.scale.sqrt().domain([0, 1]).range([height, 0]);
 	
 	var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(12, d3.format(",d")),
@@ -24454,16 +24454,19 @@
 	
 	    var g = d3.select(el).selectAll('.d3-points');
 	
-	    var text = g.selectAll(".d3-point").data(data).enter().append("text");
+	    // var text = g.selectAll(".d3-point")
+	    //     .data(data)
+	    //     .enter()
+	    //     .append("text");
 	
 	    //Add SVG Text Element Attributes
-	    var textLabels = text.attr("x", function (d) {
-	        return xScale(d.population);
-	    }).attr("y", function (d) {
-	        return yScale(Math.random());
-	    }).text(function (d) {
-	        return d.country;
-	    }).attr("font-family", "sans-serif").attr("font-size", "20px").attr("fill", "red");
+	    // var textLabels = text
+	    //       .attr("x", function(d) { return xScale(d.population); })
+	    //       .attr("y", function(d) { return yScale(d.year); })
+	    //       .text( function (d) { return d.country; })
+	    //       .attr("font-family", "sans-serif")
+	    //       .attr("font-size", "20px")
+	    //       .attr("fill", "red");
 	
 	    var point = g.selectAll('.d3-point').data(data, function (d) {
 	        return d.country;
@@ -24481,12 +24484,14 @@
 	        return scales(d.population);
 	    }).style("fill", function (d) {
 	        return color(d.country);
+	    }).text(function (d) {
+	        d.country;
 	    }).on("mouseenter", function (d) {
 	        var rect = event.target.getBoundingClientRect();
 	        point.transition().duration(200).style("opacity", .4);
 	        d3.select(this).transition().duration(200).style("opacity", 1);
 	    }).on("mouseleave", function () {
-	        point.style("opacity", 1);
+	        // point.style("opacity", 1)
 	    });
 	
 	    // EXIT

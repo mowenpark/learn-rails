@@ -8,11 +8,12 @@
     <%# Modernizr is required for Zurb Foundation %>
     <%= javascript_include_tag 'vendor/modernizr' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag('http://localhost:8080/bundle.js') %>
     <%= csrf_meta_tags %>
   </head>
   <body>
 
      <%= yield %>
-     
+
   </body>
 </html>

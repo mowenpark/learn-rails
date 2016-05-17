@@ -23,6 +23,11 @@ module LearnRails
     # For Foundation 5
     config.assets.precompile += %w( vendor/modernizr )
 
+    # For Webpack-dev-server
+    # config.asset_host = "http://localhost:8080"
+    # config.assets.prefix = '/'
+    config.assets.paths = ["/assets/javascripts"]
+    config.assets.digest = false
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true

@@ -7,17 +7,21 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 require 'csv'
-require "byebug"
+require 'byebug'
 
-csv_file = 'app/assets/Population_E_All_Area_Groups_1.csv'
+population_csv = 'app/assets/population.csv'
+emissions_csv = 'app/assets/emissions.csv'
 
-CSV.foreach(csv_file, headers: true) do |row|
-    country = row["Country"]
-    element = row["Element"]
-    population = row["Y2016"]
-    new_population = Population.create({
-      country: country,
-      element: element,
-      population: population
-    })
+CSV.foreach(population_csv, headers: true) do |row|
+  country = row["AreaName"]
+  year = row["Year"]
+  population = row["Value"]
+  new_population = Population.create({
+    country: country,
+    year: year,
+    population: (population == "NaN") ? 0 : population
+  })
 end
+
+# SV.foreach(emissions_csv, headers: true) do |row|
+# end

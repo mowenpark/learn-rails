@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20160513210817) do
 
   create_table "populations", force: :cascade do |t|
     t.string   "country"
-    t.string   "element"
+    t.integer  "year"
     t.integer  "population"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
