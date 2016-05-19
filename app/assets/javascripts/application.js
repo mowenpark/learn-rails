@@ -14,7 +14,7 @@
 //= require jquery_ujs
 //= require d3
 //= require_tree .
-//= stub bundle
+//= require bundle
 //= require foundation
 $(function() {
   $(document).foundation();

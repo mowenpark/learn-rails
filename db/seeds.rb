@@ -23,5 +23,15 @@ CSV.foreach(population_csv, headers: true) do |row|
   })
 end
 
-# SV.foreach(emissions_csv, headers: true) do |row|
-# end
+CSV.foreach(emissions_csv, headers: true) do |row|
+  country = row["AreaName"]
+  year = row["Year"]
+  emission = row["Value"]
+  emission_type = row["ElementName"]
+  new_emission = Emission.create({
+    country: country,
+    year: year,
+    emission: emission,
+    emission_type: emission_type
+    })
+end

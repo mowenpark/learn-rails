@@ -1,7 +1,7 @@
 class Api::PopulationsController < ApplicationController
 
   def index
-    @populations = Population.where(year: 2016).where(population: 100..10000000)
+    @populations = Population.where(population: 1000..100000000)
     render :index
   end
 

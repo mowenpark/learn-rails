@@ -7,6 +7,8 @@ gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder'
+gem 'sqlite3'
+gem 'pg'
 group :development, :test do
   gem 'byebug'
   gem 'web-console'
@@ -20,7 +22,6 @@ group :development do
   gem 'better_errors'
   gem 'quiet_assets'
   gem 'rails_layout'
-  gem 'sqlite3'
 end
 group :production do
   gem 'pg'

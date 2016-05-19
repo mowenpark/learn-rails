@@ -4,7 +4,7 @@ var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 39.5},
     width = 1000 - margin.right,
     height = 1000 - margin.top - margin.bottom;
 
-var xScale = d3.scale.linear().domain([1, 10000000]).range([10, width]),
+var xScale = d3.scale.log().domain([1, 10000000]).range([10, width]),
     yScale = d3.scale.sqrt().domain([0, 1]).range([height, 0]);
 
 var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(12, d3.format(",d")),
