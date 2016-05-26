@@ -16,14 +16,15 @@ d3Chart.create = function(el, props, state) {
       .attr('class', 'd3')
       .attr('width', props.width)
       .attr('height', props.height);
-  var div = d3.select("body").append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
 
+  svg.append("g")
+  	.attr("class", "labels");
+  svg.append("g")
+  	.attr("class", "lines");
   svg.append('g')
       .attr('class', 'd3-points');
 
-      // Add the x-axis.
+  // Add the x-axis.
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
@@ -44,32 +45,25 @@ d3Chart.update = function(el, state) {
 
 d3Chart.destroy = function(el) {
   // Any clean-up would go here
-  // in this example there is nothing to do
 };
 
 d3Chart._drawPoints = function(el, scales, data) {
-
-  var div = d3.select("svg").append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
 
   var color = d3.scale.category20c();
 
   var g = d3.select(el).selectAll('.d3-points');
 
-  // var text = g.selectAll(".d3-point")
-  //     .data(data)
-  //     .enter()
-  //     .append("text");
+  var text = d3.select(el).selectAll(".labels");
 
-//Add SVG Text Element Attributes
-// var textLabels = text
-//       .attr("x", function(d) { return xScale(d.population); })
-//       .attr("y", function(d) { return yScale(d.year); })
-//       .text( function (d) { return d.country; })
-//       .attr("font-family", "sans-serif")
-//       .attr("font-size", "20px")
-//       .attr("fill", "red");
+  text.selectAll('.label')
+      .data(data, function(d) { return d.country; })
+      .enter()
+  		.append("text")
+  		.attr("dy", function(d) { return yScale(Math.random()); })
+      .attr('dx', function(d) { return xScale(d.population); })
+  		.text(function(d) {
+  			return d.country;
+  		});
 
   var point = g.selectAll('.d3-point')
     .data(data, function(d) { return d.country; });
