@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.5.3'
 
 gem 'rails'
 gem 'sass-rails'
@@ -9,25 +10,28 @@ gem 'turbolinks'
 gem 'jbuilder'
 gem 'sqlite3'
 gem 'pg'
-group :development, :test do
-  gem 'byebug'
-  gem 'web-console'
-  gem 'spring'
-end
 gem 'foundation-rails'
 gem 'gibbon'
 gem 'high_voltage'
 gem 'simple_form'
+
 group :development do
   gem 'better_errors'
   gem 'quiet_assets'
   gem 'rails_layout'
 end
-group :production do
-  gem 'pg'
-  gem 'rails_12factor'
-end
+
 group :test do
   gem 'minitest-spec-rails'
   gem 'minitest-rails-capybara'
+end
+
+group :development, :test do
+  gem 'byebug'
+  gem 'web-console'
+  gem 'spring'
+end
+
+group :production do
+  gem 'rails_12factor'
 end
